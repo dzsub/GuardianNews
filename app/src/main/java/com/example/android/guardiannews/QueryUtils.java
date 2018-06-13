@@ -29,6 +29,8 @@ public final class QueryUtils {
      */
     private static final String LOG_TAG = QueryUtils.class.getSimpleName();
 
+    private static final String UNKNOWN_AUTHOR = "Unknown";
+
     private QueryUtils() throws JSONException {
 
     }
@@ -160,9 +162,13 @@ public final class QueryUtils {
                 String date = jsonResultObject.optString("webPublicationDate");
 
                 JSONArray tags = jsonResultObject.optJSONArray("tags");
-                JSONObject contributor = (JSONObject) tags.get(0);
-
-                String author = contributor.getString("webTitle");
+                String author = null;
+                if (tags != null && tags.length() > 0) {
+                    JSONObject contributor = (JSONObject) tags.get(0);
+                    author = contributor.getString("webTitle");
+                } else {
+                    author = UNKNOWN_AUTHOR;
+                }
 
                 News guardianNews = new News(sectionName, articleTitle, author, date, articleUrl);
 
