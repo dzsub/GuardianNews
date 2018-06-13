@@ -13,44 +13,37 @@ public class News {
 
     private String mArticle;
 
-    private String mTrailText;
-
-    private String mByLine;
+    private String mAuthor;
 
     private String mDate;
 
     private String mUrl;
 
-    public News (String section, String article, String trailText, String byLine, String date, String url){
+    public News(String section, String article, String author, String date, String url) {
         mSection = section;
         mArticle = article;
-        mTrailText = trailText;
-        mByLine = byLine;
+        mAuthor = author;
         mDate = date;
         mUrl = url;
     }
 
-    public  String getmSection(){
+    public String getmSection() {
         return mSection;
     }
 
-    public  String getmArticle(){
+    public String getmArticle() {
         return mArticle;
     }
 
-    public  String getmTrailText(){
-        return mTrailText;
+    public String getmAuthor() {
+        return mAuthor;
     }
 
-    public  String getmName(){
-        return mByLine;
-    }
-
-    public String getmDate(){
+    public String getmDate() {
         return mDate;
     }
 
-    public  String getmUrl(){
+    public String getmUrl() {
         return mUrl;
     }
 }

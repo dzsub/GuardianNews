@@ -8,11 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Locale;
 
 /**
  * Created by dzsub on 2018.06.04..
@@ -30,8 +30,8 @@ public class NewsAdapter extends ArrayAdapter<News> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
         View listItemView = convertView;
-        if (listItemView == null){
-            listItemView = LayoutInflater.from(getContext()).inflate(R.layout.news_list_item,parent, false);
+        if (listItemView == null) {
+            listItemView = LayoutInflater.from(getContext()).inflate(R.layout.news_list_item, parent, false);
         }
 
         // Find the News at the given position in the list of news
@@ -46,22 +46,34 @@ public class NewsAdapter extends ArrayAdapter<News> {
             TextView articleView = (TextView) listItemView.findViewById(R.id.article);
             articleView.setText(currentNews.getmArticle());
 
-            // Find the TextView with view ID trail_text
-            TextView trailTextView = (TextView) listItemView.findViewById(R.id.trail_text);
-            trailTextView.setText(currentNews.getmTrailText());
-
             TextView dateTextView = (TextView) listItemView.findViewById(R.id.date);
-            dateTextView.setText(currentNews.getmDate());
+            dateTextView.setText(formatDate(currentNews.getmDate()));
 
-            if (currentNews.getmName() != null) {
+            if (currentNews.getmAuthor() != null) {
                 // Find the TextView with view ID section
-                TextView nameView = (TextView) listItemView.findViewById(R.id.name);
-                nameView.setText(currentNews.getmSection());
+                TextView nameView = (TextView) listItemView.findViewById(R.id.author);
+                nameView.setText(currentNews.getmAuthor());
             }
 
         }
 
         return listItemView;
+    }
+
+    //Format date and time so we can easily read them
+    private String formatDate(String dateString) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'kk:mm:ss'Z'");
+        Date dateObject = null;
+        try {
+            dateObject = simpleDateFormat.parse(dateString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        simpleDateFormat = new SimpleDateFormat("dd MMM yyyy, hh:mm a");
+        String date = simpleDateFormat.format(dateObject);
+
+        return date;
     }
 
 }

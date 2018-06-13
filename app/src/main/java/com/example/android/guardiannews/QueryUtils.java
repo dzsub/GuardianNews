@@ -15,12 +15,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Created by dzsub on 2018.06.04..
@@ -37,17 +33,16 @@ public final class QueryUtils {
 
     }
 
-    public static List<News> fetchNewsData (String requestUrl){
+    public static List<News> fetchNewsData(String requestUrl) {
 
-       // Create Url object
+        // Create Url object
         URL url = createUrl(requestUrl);
 
         // Perform HTTP request to the URL and receive a JSON response back
         String jsonRespons = null;
         try {
             jsonRespons = makeHttpsRequest(url);
-        }
-        catch (IOException e){
+        } catch (IOException e) {
             Log.e(LOG_TAG, "Problem making the HTTP request.", e);
         }
 
@@ -95,7 +90,7 @@ public final class QueryUtils {
                 Log.e(LOG_TAG, "Error response code: " + urlConnection.getResponseCode());
             }
         } catch (IOException e) {
-            Log.e(LOG_TAG, "Problem retrieving the earthquake JSON results.", e);
+            Log.e(LOG_TAG, "Problem retrieving the News JSON results.", e);
         } finally {
             if (urlConnection != null) {
                 urlConnection.disconnect();
@@ -160,18 +155,16 @@ public final class QueryUtils {
 
                 // anything we want from "result"
                 String sectionName = jsonResultObject.optString("sectionName");
-                String articleTitle = jsonResponseObject.optString("webTitle");
-                String articleUrl = jsonResponseObject.optString("webUrl");
-                String date = jsonResponseObject.optString("webPublicationDate");
+                String articleTitle = jsonResultObject.optString("webTitle");
+                String articleUrl = jsonResultObject.optString("webUrl");
+                String date = jsonResultObject.optString("webPublicationDate");
 
-                // Get "fields" object
-                JSONObject jsonFieldsObject = jsonResponseObject.getJSONObject("fields");
+                JSONArray tags = jsonResultObject.optJSONArray("tags");
+                JSONObject contributor = (JSONObject) tags.get(0);
 
-                // anything we want from "fields"
-                String trailText = jsonFieldsObject.optString("trailText");
-                String byLine = jsonFieldsObject.optString("byLine");
+                String author = contributor.getString("webTitle");
 
-                News guardianNews = new News(sectionName, articleTitle, trailText, byLine, date, articleUrl);
+                News guardianNews = new News(sectionName, articleTitle, author, date, articleUrl);
 
                 news.add(guardianNews);
             }
@@ -180,22 +173,11 @@ public final class QueryUtils {
             // If an error is thrown when executing any of the above statements in the "try" block,
             // catch the exception here, so the app doesn't crash. Print a log message
             // with the message from the exception.
-            Log.e("QueryUtils", "Problem parsing the earthquake JSON results", e);
+            Log.e("QueryUtils", "Problem parsing the News JSON results", e);
         }
 
         // returns the list of news
         return news;
-    }
-
-    private static Date getDateFromString(String dateFromString){
-        SimpleDateFormat formatter = new SimpleDateFormat("yyy-MM-dd'T'HH:mm:ss'z'", Locale.getDefault());
-        Date date = null;
-        try {
-            date = formatter.parse(dateFromString);
-        } catch (ParseException e){
-            e.printStackTrace();
-        }
-        return date;
     }
 
 }

@@ -4,4 +4,7 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="text_color">#000000</color>
+    <color name="bg_color_category">#5dc755</color>
+    <color name="bg_color_author">#5672ce</color>
+    <color name="bg_color_article">#f4e364</color>
 </resources>
